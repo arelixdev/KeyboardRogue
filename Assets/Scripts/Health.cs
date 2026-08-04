@@ -8,6 +8,8 @@ public class Health : MonoBehaviour
     public int Current { get; private set; }
     public int Max => maxHealth;
 
+    // Montant brut inflige, pour le feedback visuel (flash, nombre flottant). Distinct de 'Damaged' qui donne les PV restants.
+    public event Action<int> DamageTaken;
     public event Action<int> Damaged;
     public event Action Died;
 
@@ -23,6 +25,7 @@ public class Health : MonoBehaviour
 
         Current = Mathf.Max(0, Current - amount);
         Debug.Log($"{name} takes {amount} damage -> {Current}/{maxHealth} HP");
+        DamageTaken?.Invoke(amount);
         Damaged?.Invoke(Current);
 
         if (Current == 0)

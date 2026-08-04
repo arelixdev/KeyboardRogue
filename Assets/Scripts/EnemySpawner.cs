@@ -19,6 +19,8 @@ public class EnemySpawner : MonoBehaviour
 
     public int SpawnedCount => spawnedCount;
     public int ActiveCount => activeEnemies.Count;
+    // Pas encore generes + actuellement en vie = ce qu'il reste a vaincre pour nettoyer la zone.
+    public int RemainingCount => (maxEnemiesPerLevel - spawnedCount) + activeEnemies.Count;
 
     private void Update()
     {

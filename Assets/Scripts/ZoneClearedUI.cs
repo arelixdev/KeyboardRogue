@@ -3,14 +3,10 @@ using UnityEngine;
 public class ZoneClearedUI : MonoBehaviour
 {
     [SerializeField] private GameObject banner;
-    [SerializeField] private EnemySpawner spawner;
 
     private void Start()
     {
-        if (spawner == null)
-            spawner = FindAnyObjectByType<EnemySpawner>();
-
-        spawner.AllEnemiesDefeated += ShowMessage;
+        GameManager.Instance.Spawner.AllEnemiesDefeated += ShowMessage;
         banner.SetActive(false);
     }
 

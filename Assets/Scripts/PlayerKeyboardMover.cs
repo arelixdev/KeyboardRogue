@@ -15,7 +15,7 @@ public class PlayerKeyboardMover : MonoBehaviour
     private void Start()
     {
         if (keyboard == null)
-            keyboard = FindAnyObjectByType<KeyboardGenerator>();
+            keyboard = GameManager.Instance.Keyboard;
 
         PlaceOnRandomKey();
     }

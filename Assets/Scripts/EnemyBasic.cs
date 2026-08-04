@@ -33,9 +33,9 @@ public class EnemyBasic : MonoBehaviour
     private void Awake()
     {
         if (keyboard == null)
-            keyboard = FindAnyObjectByType<KeyboardGenerator>();
+            keyboard = GameManager.Instance.Keyboard;
         if (player == null)
-            player = FindAnyObjectByType<PlayerKeyboardMover>();
+            player = GameManager.Instance.Player;
 
         health = GetComponent<Health>();
         playerHealth = player.GetComponent<Health>();
