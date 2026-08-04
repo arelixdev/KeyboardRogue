@@ -1,8 +1,12 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
+    // Tous les ennemis du niveau ont ete generes et vaincus. Un futur systeme d'evenement s'en servira pour enchainer la suite.
+    public event Action AllEnemiesDefeated;
+
     [SerializeField] private EnemyBasic enemyPrefab;
     [SerializeField] private int maxEnemiesPerLevel = 12;
     [SerializeField] private int maxConcurrentEnemies = 3;
@@ -11,6 +15,7 @@ public class EnemySpawner : MonoBehaviour
     private readonly List<EnemyBasic> activeEnemies = new List<EnemyBasic>();
     private int spawnedCount;
     private float spawnTimer;
+    private bool zoneCleared;
 
     public int SpawnedCount => spawnedCount;
     public int ActiveCount => activeEnemies.Count;
@@ -45,5 +50,11 @@ public class EnemySpawner : MonoBehaviour
     {
         enemy.Removed -= OnEnemyRemoved;
         activeEnemies.Remove(enemy);
+
+        if (!zoneCleared && spawnedCount >= maxEnemiesPerLevel && activeEnemies.Count == 0)
+        {
+            zoneCleared = true;
+            AllEnemiesDefeated?.Invoke();
+        }
     }
 }
