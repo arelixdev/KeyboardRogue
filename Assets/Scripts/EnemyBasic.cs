@@ -1,9 +1,17 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class EnemyBasic : MonoBehaviour
 {
+    // Permet a un spawner de suivre combien d'ennemis sont encore en vie, quelle que soit la cause de la mort.
+    public event Action<EnemyBasic> Removed;
+
+    // Registre partage entre tous les ennemis vivants, pour eviter que deux ennemis se superposent sur la meme case.
+    private static readonly List<EnemyBasic> ActiveEnemies = new List<EnemyBasic>();
+
     [SerializeField] private KeyboardGenerator keyboard;
     [SerializeField] private PlayerKeyboardMover player;
     [SerializeField] private float spawnDelay = 3f;
@@ -34,6 +42,8 @@ public class EnemyBasic : MonoBehaviour
 
         renderers = GetComponentsInChildren<Renderer>();
         SetVisible(false);
+
+        ActiveEnemies.Add(this);
     }
 
     private void Start()
@@ -91,7 +101,13 @@ public class EnemyBasic : MonoBehaviour
         if (adjacent.Count == 0)
             return;
 
-        currentKey = adjacent[Random.Range(0, adjacent.Count)];
+        KeyView candidate = adjacent[Random.Range(0, adjacent.Count)];
+
+        // Une autre ennemi occupe deja cette case: on retarde le deplacement, on retentera au prochain tick.
+        if (IsOccupiedByOtherEnemy(candidate))
+            return;
+
+        currentKey = candidate;
         targetPosition = GetStandPosition(currentKey);
 
         // L'ennemi atterrit sur la case du joueur: mort instantanee, le joueur perd 1 pv.
@@ -101,6 +117,17 @@ public class EnemyBasic : MonoBehaviour
             playerHealth.TakeDamage(1);
             Destroy(gameObject);
         }
+    }
+
+    private bool IsOccupiedByOtherEnemy(KeyView key)
+    {
+        foreach (EnemyBasic other in ActiveEnemies)
+        {
+            if (other != this && other.currentKey == key)
+                return true;
+        }
+
+        return false;
     }
 
     private void CheckPlayerContact()
@@ -155,5 +182,11 @@ public class EnemyBasic : MonoBehaviour
     {
         foreach (Renderer r in renderers)
             r.enabled = visible;
+    }
+
+    private void OnDestroy()
+    {
+        ActiveEnemies.Remove(this);
+        Removed?.Invoke(this);
     }
 }
