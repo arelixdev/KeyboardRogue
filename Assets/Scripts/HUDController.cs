@@ -15,6 +15,10 @@ public class HUDController : MonoBehaviour
 
     private void Update()
     {
+        // Peut devenir nul le temps d'une frame pendant le dechargement de la scene (retour a la carte).
+        if (playerHealth == null || GameManager.Instance == null)
+            return;
+
         healthText.text = $"PV: {playerHealth.Current}/{playerHealth.Max}";
         enemiesText.text = $"Ennemis restants: {GameManager.Instance.Spawner.RemainingCount}";
     }

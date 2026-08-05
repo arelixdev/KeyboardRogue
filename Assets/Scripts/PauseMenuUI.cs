@@ -21,7 +21,8 @@ public class PauseMenuUI : MonoBehaviour
 
     private void Update()
     {
-        if (GameManager.Instance.IsGameOver)
+        // Peut devenir nul le temps d'une frame pendant le dechargement de la scene (retour a la carte).
+        if (GameManager.Instance == null || GameManager.Instance.IsGameOver)
             return;
 
         if (Keyboard.current.escapeKey.wasPressedThisFrame)

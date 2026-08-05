@@ -22,6 +22,17 @@ public class EnemySpawner : MonoBehaviour
     // Pas encore generes + actuellement en vie = ce qu'il reste a vaincre pour nettoyer la zone.
     public int RemainingCount => (maxEnemiesPerLevel - spawnedCount) + activeEnemies.Count;
 
+    private void Awake()
+    {
+        // Le niveau choisi sur la carte du monde peut surcharger le rythme/nombre d'ennemis.
+        if (LevelSession.Current == null)
+            return;
+
+        maxEnemiesPerLevel = LevelSession.Current.maxEnemiesPerLevel;
+        maxConcurrentEnemies = LevelSession.Current.maxConcurrentEnemies;
+        spawnInterval = LevelSession.Current.spawnInterval;
+    }
+
     private void Update()
     {
         if (spawnedCount >= maxEnemiesPerLevel)

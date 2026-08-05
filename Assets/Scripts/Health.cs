@@ -18,6 +18,11 @@ public class Health : MonoBehaviour
         Current = maxHealth;
     }
 
+    public void SetCurrent(int value)
+    {
+        Current = Mathf.Clamp(value, 0, maxHealth);
+    }
+
     public void TakeDamage(int amount)
     {
         if (Current <= 0)

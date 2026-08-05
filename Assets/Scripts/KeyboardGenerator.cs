@@ -43,6 +43,10 @@ public class KeyboardGenerator : MonoBehaviour
 
     private void Awake()
     {
+        // Le niveau choisi sur la carte du monde peut imposer son propre layout.
+        if (LevelSession.Current != null)
+            layout = LevelSession.Current.keyboardLayout;
+
         // Awake plutot que Start: garantit que 'Keys' est deja rempli quand
         // d'autres scripts (ex: le joueur) le lisent dans leur propre Start().
         Generate();

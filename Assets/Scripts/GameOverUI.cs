@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameOverUI : MonoBehaviour
@@ -8,7 +9,7 @@ public class GameOverUI : MonoBehaviour
 
     private void Awake()
     {
-        restartButton.onClick.AddListener(RestartLevel);
+        restartButton.onClick.AddListener(RestartRun);
     }
 
     private void Start()
@@ -24,8 +25,11 @@ public class GameOverUI : MonoBehaviour
         GameManager.Instance.Player.enabled = false;
     }
 
-    public void RestartLevel()
+    // Mort = fin de la run entiere (convention roguelike): on repart d'une carte neuve.
+    public void RestartRun()
     {
-        GameManager.Instance.Restart();
+        LevelSession.StartNewRun();
+        Time.timeScale = 1f;
+        SceneManager.LoadScene("MapScene");
     }
 }
