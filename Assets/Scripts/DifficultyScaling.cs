@@ -3,7 +3,7 @@ using UnityEngine;
 // Calcule les parametres de niveau (ennemis/difficulte) a partir d'une courbe configurable (SO).
 public static class DifficultyScaling
 {
-    public static LevelDefinition Build(MapNodeType type, int depth, DifficultyCurveConfig curve)
+    public static LevelDefinition Build(MapNodeType type, int depth, DifficultyCurveConfig curve, EliteEncounterConfig eliteEncounter = null)
     {
         int enemies = curve.baseEnemies + Mathf.RoundToInt(depth * curve.enemiesPerRow);
         int concurrent = curve.baseConcurrent + Mathf.RoundToInt(depth * curve.concurrentPerRow);
@@ -23,6 +23,14 @@ public static class DifficultyScaling
                 break;
         }
 
+        // Particularite Elite: modificateurs additionnels par-dessus le bonus Elite normal.
+        if (type == MapNodeType.Elite && eliteEncounter != null)
+        {
+            enemies = Mathf.RoundToInt(enemies * eliteEncounter.extraEnemiesMultiplier);
+            concurrent += eliteEncounter.extraConcurrentBonus;
+            interval *= eliteEncounter.extraIntervalMultiplier;
+        }
+
         concurrent = Mathf.Clamp(concurrent, curve.minConcurrent, curve.maxConcurrent);
 
         LevelDefinition level = ScriptableObject.CreateInstance<LevelDefinition>();
@@ -31,6 +39,7 @@ public static class DifficultyScaling
         level.maxEnemiesPerLevel = enemies;
         level.maxConcurrentEnemies = concurrent;
         level.spawnInterval = interval;
+        level.eliteEncounter = type == MapNodeType.Elite ? eliteEncounter : null;
         return level;
     }
 }

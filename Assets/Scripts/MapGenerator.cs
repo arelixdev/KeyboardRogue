@@ -11,7 +11,7 @@ public static class MapGenerator
         var rows = new List<List<MapNode>>();
 
         for (int r = 0; r < regularRowCount; r++)
-            rows.Add(GenerateRegularRow(r, columns));
+            rows.Add(GenerateRegularRow(r, columns, config));
 
         rows.Add(GenerateRestRow(regularRowCount, columns));
         rows.Add(GenerateBossRow(regularRowCount + 1));
@@ -22,15 +22,32 @@ public static class MapGenerator
         return rows;
     }
 
-    private static List<MapNode> GenerateRegularRow(int row, int columns)
+    private static List<MapNode> GenerateRegularRow(int row, int columns, DungeonFloorConfig config)
     {
         var nodes = new List<MapNode>();
         for (int c = 0; c < columns; c++)
         {
             MapNodeType type = row == 0 ? MapNodeType.Basic : RollType();
-            nodes.Add(new MapNode { Row = row, Column = c, Type = type });
+            var node = new MapNode { Row = row, Column = c, Type = type };
+
+            if (type == MapNodeType.Elite)
+                node.EliteEncounter = RollEliteEncounter(config);
+
+            nodes.Add(node);
         }
         return nodes;
+    }
+
+    // Un noeud Elite peut tirer une particularite (modificateurs de combat/clavier) dans la liste
+    // de l'etage. Sinon il reste un Elite "normal".
+    private static EliteEncounterConfig RollEliteEncounter(DungeonFloorConfig config)
+    {
+        if (config.eliteEncounters == null || config.eliteEncounters.Length == 0)
+            return null;
+        if (Random.value > config.eliteEncounterChance)
+            return null;
+
+        return config.eliteEncounters[Random.Range(0, config.eliteEncounters.Length)];
     }
 
     private static MapNodeType RollType()

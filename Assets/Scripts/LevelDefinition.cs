@@ -8,4 +8,7 @@ public class LevelDefinition : ScriptableObject
     public int maxEnemiesPerLevel = 12;
     public int maxConcurrentEnemies = 3;
     public float spawnInterval = 4f;
+
+    // Non-null si ce combat est un Elite ayant tire une particularite (voir EliteEncounterConfig).
+    public EliteEncounterConfig eliteEncounter;
 }

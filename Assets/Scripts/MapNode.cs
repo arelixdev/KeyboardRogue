@@ -16,4 +16,7 @@ public class MapNode
     public MapNodeType Type;
     public readonly List<int> Connections = new List<int>();
     public bool Visited;
+
+    // Non-null uniquement pour un noeud Elite ayant tire une particularite (voir MapGenerator).
+    public EliteEncounterConfig EliteEncounter;
 }

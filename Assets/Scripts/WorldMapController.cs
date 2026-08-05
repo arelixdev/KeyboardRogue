@@ -185,16 +185,17 @@ public class WorldMapController : MonoBehaviour
         }
     }
 
-    // Systeme d'evenement minimal en attendant un vrai contenu (Phase 3 de la feuille de route).
+    // Evenements tires dans la liste de l'etage courant (DungeonFloorConfig.possibleEvents).
     private void ResolveEvent(MapNode node)
     {
         LevelSession.CompleteNodeImmediately(node);
 
-        bool healEffect = Random.value < 0.5f && LevelSession.PlayerHp < LevelSession.PlayerMaxHp;
-        if (healEffect)
+        EventDefinition chosenEvent = PickEvent();
+        if (chosenEvent != null)
         {
-            LevelSession.PlayerHp = Mathf.Min(LevelSession.PlayerMaxHp, LevelSession.PlayerHp + 1);
-            eventText.text = "Vous trouvez une fiole mysterieuse. +1 PV.";
+            if (chosenEvent.healAmount > 0)
+                LevelSession.PlayerHp = Mathf.Min(LevelSession.PlayerMaxHp, LevelSession.PlayerHp + chosenEvent.healAmount);
+            eventText.text = chosenEvent.message;
         }
         else
         {
@@ -203,6 +204,15 @@ public class WorldMapController : MonoBehaviour
 
         eventPanel.SetActive(true);
         RefreshMap();
+    }
+
+    private EventDefinition PickEvent()
+    {
+        DungeonFloorConfig floor = LevelSession.CurrentFloorConfig;
+        if (floor == null || floor.possibleEvents == null || floor.possibleEvents.Length == 0)
+            return null;
+
+        return floor.possibleEvents[Random.Range(0, floor.possibleEvents.Length)];
     }
 
     private void ShowToast(string message)

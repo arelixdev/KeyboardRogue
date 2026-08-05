@@ -12,17 +12,20 @@ public class PlayerRunSync : MonoBehaviour
 
     private void Start()
     {
+        health.SetMax(LevelSession.PlayerMaxHp);
         health.SetCurrent(LevelSession.PlayerHp);
-        health.DamageTaken += OnDamageTaken;
+        // 'Damaged' se declenche sur tout changement de PV (degats ET soin), contrairement a
+        // 'DamageTaken' qui ne sert qu'au feedback visuel des degats.
+        health.Damaged += OnHpChanged;
     }
 
-    private void OnDamageTaken(int amount)
+    private void OnHpChanged(int current)
     {
-        LevelSession.PlayerHp = health.Current;
+        LevelSession.PlayerHp = current;
     }
 
     private void OnDestroy()
     {
-        health.DamageTaken -= OnDamageTaken;
+        health.Damaged -= OnHpChanged;
     }
 }

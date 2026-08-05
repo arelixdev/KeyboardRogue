@@ -13,5 +13,20 @@ MonoBehaviour:
   m_Name: Floor1
   m_EditorClassIdentifier: Assembly-CSharp::DungeonFloorConfig
   floorName: Etage 1
-  regularRowCount: 8
-  columns: 3
+  regularRowCount: 6
+  columns: 5
+  possibleEvents:
+  - {fileID: 11400000, guid: e85811d03bca23f4993d6672588869b0, type: 2}
+  - {fileID: 11400000, guid: 2f40582ce7108e049aa04f7c07eac55f, type: 2}
+  - {fileID: 11400000, guid: 5eb3b032060acab47b4a859f6a279f6c, type: 2}
+  eliteEncounterChance: 0.5
+  eliteEncounters:
+  - {fileID: 11400000, guid: 4f7746c120ff3df45b78e54293b872bb, type: 2}
+  possibleBonuses:
+  - {fileID: 11400000, guid: 44910b248cb2319498de4138062106d1, type: 2}
+  - {fileID: 11400000, guid: 646246d7b4170ff46be41abd4f5693a6, type: 2}
+  - {fileID: 11400000, guid: 1f938c5e09687974f847003a6d7f975c, type: 2}
+  - {fileID: 11400000, guid: ef702c02a335b084287d6b217bc962a9, type: 2}
+  - {fileID: 11400000, guid: 289f00ada707a864bad4ad622dd7ef4d, type: 2}
+  - {fileID: 11400000, guid: 7517d6b2b2a72ce418dae359d8ad52dd, type: 2}
+  - {fileID: 11400000, guid: df3fe5655f65dab4c870f5e48b99dab9, type: 2}

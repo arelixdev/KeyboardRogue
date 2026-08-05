@@ -109,14 +109,6 @@ public class EnemyBasic : MonoBehaviour
 
         currentKey = candidate;
         targetPosition = GetStandPosition(currentKey);
-
-        // L'ennemi atterrit sur la case du joueur: mort instantanee, le joueur perd 1 pv.
-        if (currentKey == player.CurrentKey)
-        {
-            isActive = false;
-            playerHealth.TakeDamage(1);
-            Destroy(gameObject);
-        }
     }
 
     private bool IsOccupiedByOtherEnemy(KeyView key)
@@ -140,14 +132,26 @@ public class EnemyBasic : MonoBehaviour
         isTouchingPlayer = touching;
     }
 
-    // Le joueur passe dessus pendant son dash: degat progressif a l'ennemi.
+    // Contact physique reel (jamais base sur la destination visee, seulement la position actuelle).
+    // Le joueur est en dash: il traverse l'ennemi, qui encaisse des degats.
+    // Le joueur est arrete: l'ennemi vient de le rattraper, c'est lui qui inflige les degats.
     private void OnPlayerContact()
     {
-        health.TakeDamage(1);
+        if (player.IsMoving)
+        {
+            int damage = 1 + Mathf.RoundToInt(LevelSession.BonusContactDamage);
+            health.TakeDamage(damage);
 
-        if (health.Current <= 0)
+            if (health.Current <= 0)
+            {
+                isActive = false;
+                Destroy(gameObject);
+            }
+        }
+        else
         {
             isActive = false;
+            playerHealth.TakeDamage(1);
             Destroy(gameObject);
         }
     }

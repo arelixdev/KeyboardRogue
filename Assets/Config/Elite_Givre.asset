@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c835025da0357514882d35348f45709f, type: 3}
+  m_Name: Elite_Givre
+  m_EditorClassIdentifier: Assembly-CSharp::EliteEncounterConfig
+  encounterName: Elite Givre
+  description: Le froid mordant gele certaines touches et englue les autres.
+  extraEnemiesMultiplier: 1.15
+  extraConcurrentBonus: 0
+  extraIntervalMultiplier: 1
+  disabledKeyCount: 1
+  stickyKeyCount: 2
+  stickyHitsRequired: 4
+  frozenKeyCount: 2

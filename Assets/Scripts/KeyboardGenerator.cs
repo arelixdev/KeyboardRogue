@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 #if UNITY_EDITOR
 using UnityEditor;
@@ -50,6 +51,43 @@ public class KeyboardGenerator : MonoBehaviour
         // Awake plutot que Start: garantit que 'Keys' est deja rempli quand
         // d'autres scripts (ex: le joueur) le lisent dans leur propre Start().
         Generate();
+
+        // Les liaisons permanentes (Phase 4, choisies par le joueur) s'appliquent d'abord; les
+        // modificateurs Elite temporaires (Phase 3) ne piochent que parmi les touches restantes,
+        // pour ne jamais ecraser un effet permanent.
+        ApplyPermanentKeyEffects();
+        ApplyEliteEncounter(LevelSession.Current?.eliteEncounter);
+    }
+
+    private void ApplyPermanentKeyEffects()
+    {
+        foreach (KeyValuePair<char, PermanentKeyEffectType> binding in LevelSession.PermanentKeyEffects)
+        {
+            if (keys.TryGetValue(binding.Key, out KeyView key))
+                key.SetModifier(binding.Value.ToKeyModifier());
+        }
+    }
+
+    // Applique les modificateurs de touches (desactivee/gluante/gelee) d'une particularite Elite.
+    private void ApplyEliteEncounter(EliteEncounterConfig encounter)
+    {
+        if (encounter == null)
+            return;
+
+        List<KeyView> pool = keys.Values.Where(k => k.Modifier == KeyModifierType.None).ToList();
+        ApplyModifierToRandomKeys(pool, KeyModifierType.Disabled, encounter.disabledKeyCount);
+        ApplyModifierToRandomKeys(pool, KeyModifierType.Sticky, encounter.stickyKeyCount, encounter.stickyHitsRequired);
+        ApplyModifierToRandomKeys(pool, KeyModifierType.Frozen, encounter.frozenKeyCount);
+    }
+
+    private static void ApplyModifierToRandomKeys(List<KeyView> pool, KeyModifierType modifier, int count, int stickyHitsRequired = 3)
+    {
+        for (int i = 0; i < count && pool.Count > 0; i++)
+        {
+            int index = Random.Range(0, pool.Count);
+            pool[index].SetModifier(modifier, stickyHitsRequired);
+            pool.RemoveAt(index);
+        }
     }
 
     public void SetLayout(KeyboardLayoutType newLayout)

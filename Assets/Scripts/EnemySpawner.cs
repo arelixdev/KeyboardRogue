@@ -30,7 +30,7 @@ public class EnemySpawner : MonoBehaviour
 
         maxEnemiesPerLevel = LevelSession.Current.maxEnemiesPerLevel;
         maxConcurrentEnemies = LevelSession.Current.maxConcurrentEnemies;
-        spawnInterval = LevelSession.Current.spawnInterval;
+        spawnInterval = Mathf.Max(0.5f, LevelSession.Current.spawnInterval + LevelSession.BonusEnemySpawnInterval);
     }
 
     private void Update()

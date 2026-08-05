@@ -24,6 +24,16 @@ public static class LevelSession
     public static int PlayerHp = StartingHp;
     public static int PlayerMaxHp = StartingHp;
 
+    // Stats globales accumulees via les bonus/malus de fin de combat (Phase 4). Remises a zero a
+    // chaque nouvelle run.
+    public static float BonusDashSpeed;
+    public static float BonusContactDamage;
+    public static float BonusEnemySpawnInterval;
+
+    // Touches liees a un effet permanent par le joueur (Heal/Broken), actives pour tous les
+    // combats restants de la run.
+    public static readonly Dictionary<char, PermanentKeyEffectType> PermanentKeyEffects = new Dictionary<char, PermanentKeyEffectType>();
+
     public static void Configure(DungeonFloorConfig[] floors, DifficultyCurveConfig difficultyCurve)
     {
         Floors = floors;
@@ -47,6 +57,10 @@ public static class LevelSession
         Current = null;
         PlayerHp = StartingHp;
         PlayerMaxHp = StartingHp;
+        BonusDashSpeed = 0f;
+        BonusContactDamage = 0f;
+        BonusEnemySpawnInterval = 0f;
+        PermanentKeyEffects.Clear();
         GenerateFloorMap();
     }
 
@@ -69,8 +83,11 @@ public static class LevelSession
     {
         PendingNode = node;
         int globalDepth = GetGlobalDepth(node.Row);
-        Current = DifficultyScaling.Build(node.Type, globalDepth, DifficultyCurve);
+        Current = DifficultyScaling.Build(node.Type, globalDepth, DifficultyCurve, node.EliteEncounter);
     }
+
+    public static DungeonFloorConfig CurrentFloorConfig =>
+        Floors != null && CurrentFloorIndex >= 0 && CurrentFloorIndex < Floors.Length ? Floors[CurrentFloorIndex] : null;
 
     private static int GetGlobalDepth(int rowInCurrentFloor)
     {

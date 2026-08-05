@@ -23,6 +23,21 @@ public class Health : MonoBehaviour
         Current = Mathf.Clamp(value, 0, maxHealth);
     }
 
+    public void SetMax(int value)
+    {
+        maxHealth = Mathf.Max(1, value);
+        Current = Mathf.Min(Current, maxHealth);
+    }
+
+    public void Heal(int amount)
+    {
+        if (Current <= 0)
+            return;
+
+        Current = Mathf.Min(maxHealth, Current + amount);
+        Damaged?.Invoke(Current);
+    }
+
     public void TakeDamage(int amount)
     {
         if (Current <= 0)
