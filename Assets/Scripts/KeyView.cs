@@ -20,6 +20,7 @@ public class KeyView : MonoBehaviour
     private static readonly Color FrozenColor = new Color(0.4f, 0.8f, 1f);
     private static readonly Color HealColor = new Color(0.95f, 0.45f, 0.75f);
     private static readonly Color BrokenColor = new Color(0.15f, 0.1f, 0.1f);
+    private static readonly Color SpellHighlightColor = new Color(1f, 0.84f, 0.2f);
 
     public char Character { get; private set; }
     public int Row { get; private set; }
@@ -30,6 +31,7 @@ public class KeyView : MonoBehaviour
     private Renderer bodyRenderer;
     private Color baseColor;
     private int stickyHitsRemaining;
+    private bool isSpellHighlighted;
 
     public void SetCharacter(char character, int row, int col)
     {
@@ -72,6 +74,14 @@ public class KeyView : MonoBehaviour
         return true;
     }
 
+    // Progression d'une sequence de sort en cours de saisie (Phase 5): dore tant que la touche
+    // fait partie d'une combinaison valide en cours, redevient normal si la sequence est ratee.
+    public void SetSpellHighlighted(bool highlighted)
+    {
+        isSpellHighlighted = highlighted;
+        ApplyVisual();
+    }
+
     private void ApplyVisual()
     {
         if (bodyRenderer == null)
@@ -82,7 +92,7 @@ public class KeyView : MonoBehaviour
         if (baseColor == default)
             baseColor = bodyRenderer.material.color;
 
-        bodyRenderer.material.color = Modifier switch
+        Color modifierColor = Modifier switch
         {
             KeyModifierType.Disabled => DisabledColor,
             KeyModifierType.Sticky => StickyColor,
@@ -91,5 +101,7 @@ public class KeyView : MonoBehaviour
             KeyModifierType.Broken => BrokenColor,
             _ => baseColor,
         };
+
+        bodyRenderer.material.color = isSpellHighlighted ? SpellHighlightColor : modifierColor;
     }
 }

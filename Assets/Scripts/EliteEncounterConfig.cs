@@ -22,4 +22,8 @@ public class EliteEncounterConfig : ScriptableObject
 
     [Header("Touches gelees (degats a l'arrivee et au passage)")]
     public int frozenKeyCount = 0;
+
+    [Header("Coherence thematique")]
+    [Tooltip("Si coche, un seul type de modificateur (parmi ceux avec un compte > 0, tire au poids de leur compte) est applique pour ce combat, sur un nombre de touches egal a la somme des comptes. Sinon, chaque type est applique independamment avec son propre compte.")]
+    public bool singleModifierTypePerFight = true;
 }

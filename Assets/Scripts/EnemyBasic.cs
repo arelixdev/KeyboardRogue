@@ -12,6 +12,9 @@ public class EnemyBasic : MonoBehaviour
     // Registre partage entre tous les ennemis vivants, pour eviter que deux ennemis se superposent sur la meme case.
     private static readonly List<EnemyBasic> ActiveEnemies = new List<EnemyBasic>();
 
+    // Expose en lecture seule pour les effets de sort (degats/gel/destruction de zone, Phase 5).
+    public static IReadOnlyList<EnemyBasic> ActiveEnemiesList => ActiveEnemies;
+
     [SerializeField] private KeyboardGenerator keyboard;
     [SerializeField] private PlayerKeyboardMover player;
     [SerializeField] private float spawnDelay = 3f;
@@ -27,6 +30,7 @@ public class EnemyBasic : MonoBehaviour
     private KeyView currentKey;
     private Vector3 targetPosition;
     private float moveTimer;
+    private float stunTimer;
     private bool isActive;
     private bool isTouchingPlayer;
 
@@ -62,12 +66,48 @@ public class EnemyBasic : MonoBehaviour
         if (!isActive)
             return;
 
+        // Gele par un sort (Phase 5): reste inerte (ne se deplace pas) mais reste attaquable au contact.
+        if (stunTimer > 0f)
+        {
+            stunTimer -= Time.deltaTime;
+            return;
+        }
+
         moveTimer += Time.deltaTime;
         if (moveTimer >= moveInterval)
         {
             moveTimer -= moveInterval;
             MoveToRandomAdjacentKey();
         }
+    }
+
+    // --- Effets de sort (Phase 5) ---
+
+    public void ApplyDamage(int amount)
+    {
+        if (!isActive)
+            return;
+
+        health.TakeDamage(amount);
+        if (health.Current <= 0)
+        {
+            isActive = false;
+            Destroy(gameObject);
+        }
+    }
+
+    public void Stun(float duration)
+    {
+        stunTimer = Mathf.Max(stunTimer, duration);
+    }
+
+    public void Kill()
+    {
+        if (!isActive)
+            return;
+
+        isActive = false;
+        Destroy(gameObject);
     }
 
     private void Spawn()
@@ -139,14 +179,7 @@ public class EnemyBasic : MonoBehaviour
     {
         if (player.IsMoving)
         {
-            int damage = 1 + Mathf.RoundToInt(LevelSession.BonusContactDamage);
-            health.TakeDamage(damage);
-
-            if (health.Current <= 0)
-            {
-                isActive = false;
-                Destroy(gameObject);
-            }
+            ApplyDamage(1 + Mathf.RoundToInt(LevelSession.BonusContactDamage));
         }
         else
         {

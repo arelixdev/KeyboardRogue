@@ -797,6 +797,8 @@ MonoBehaviour:
   qwertyButton: {fileID: 1377241937}
   floors:
   - {fileID: 11400000, guid: e81b60439e10b364eb731bc8b1f2a964, type: 2}
+  - {fileID: 11400000, guid: 4bf81b3e17a004a43b75910844a1c36e, type: 2}
+  - {fileID: 11400000, guid: 5769287291967cd4bba12812ed8e9b6e, type: 2}
   difficultyCurve: {fileID: 11400000, guid: a270a49423a48884f856a26c5546a324, type: 2}
 --- !u!114 &789396199
 MonoBehaviour:
@@ -877,9 +879,9 @@ RectTransform:
   - {fileID: 663894981}
   - {fileID: 1157711598}
   - {fileID: 790563128}
-  - {fileID: 727496692}
   - {fileID: 1799055581}
   - {fileID: 484497506}
+  - {fileID: 727496692}
   - {fileID: 316005979}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1337,6 +1339,7 @@ GameObject:
   - component: {fileID: 999765566}
   - component: {fileID: 999765565}
   - component: {fileID: 999765564}
+  - component: {fileID: 999765567}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -1418,6 +1421,50 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &999765567
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 999765563}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalCameraData
+  m_RenderShadows: 1
+  m_RequiresDepthTextureOption: 2
+  m_RequiresOpaqueTextureOption: 2
+  m_CameraType: 0
+  m_Cameras: []
+  m_RendererIndex: -1
+  m_VolumeLayerMask:
+    serializedVersion: 2
+    m_Bits: 1
+  m_VolumeTrigger: {fileID: 0}
+  m_VolumeFrameworkUpdateModeOption: 2
+  m_RenderPostProcessing: 0
+  m_Antialiasing: 0
+  m_AntialiasingQuality: 2
+  m_StopNaN: 0
+  m_Dithering: 0
+  m_ClearDepth: 1
+  m_AllowXRRendering: 1
+  m_AllowHDROutput: 1
+  m_UseScreenCoordOverride: 0
+  m_ScreenSizeOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_ScreenCoordScaleBias: {x: 0, y: 0, z: 0, w: 0}
+  m_RequiresDepthTexture: 0
+  m_RequiresColorTexture: 0
+  m_TaaSettings:
+    m_Quality: 3
+    m_FrameInfluence: 0.1
+    m_JitterScale: 1
+    m_MipBias: 0
+    m_VarianceClampScale: 0.9
+    m_ContrastAdaptiveSharpening: 0
+  m_Version: 2
 --- !u!1 &1157711597
 GameObject:
   m_ObjectHideFlags: 0

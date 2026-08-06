@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Elite_Givre
   m_EditorClassIdentifier: Assembly-CSharp::EliteEncounterConfig
   encounterName: Elite Givre
-  description: Le froid mordant gele certaines touches et englue les autres.
+  description: Le froid mordant s'abat sur plusieurs touches, toutes gelees, engluees ou desactivees ensemble selon l'intensite du sort.
   extraEnemiesMultiplier: 1.15
   extraConcurrentBonus: 0
   extraIntervalMultiplier: 1

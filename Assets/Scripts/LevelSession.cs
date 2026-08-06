@@ -34,6 +34,13 @@ public static class LevelSession
     // combats restants de la run.
     public static readonly Dictionary<char, PermanentKeyEffectType> PermanentKeyEffects = new Dictionary<char, PermanentKeyEffectType>();
 
+    // Sequence de touches assignee a chaque sort pour la run en cours (Phase 5): toujours
+    // differente d'une run a l'autre, stable du debut a la fin de celle-ci.
+    public static Dictionary<SpellDefinition, char[]> SpellSequences { get; private set; } = new Dictionary<SpellDefinition, char[]>();
+
+    // Sorts dont le joueur connait la sequence (revele par un event, ou devine/lance par hasard).
+    public static readonly HashSet<SpellDefinition> DiscoveredSpells = new HashSet<SpellDefinition>();
+
     public static void Configure(DungeonFloorConfig[] floors, DifficultyCurveConfig difficultyCurve)
     {
         Floors = floors;
@@ -61,7 +68,20 @@ public static class LevelSession
         BonusContactDamage = 0f;
         BonusEnemySpawnInterval = 0f;
         PermanentKeyEffects.Clear();
+        DiscoveredSpells.Clear();
+        SpellSequences = SpellSystem.AssignSequences(Floors, KeyboardPreference.Layout);
+        LogSpellSequences();
         GenerateFloorMap();
+    }
+
+    // Debug: liste tous les sorts de la run et leur sequence de touches, decouverts ou non.
+    private static void LogSpellSequences()
+    {
+        if (SpellSequences.Count == 0)
+            return;
+
+        string list = string.Join("\n", SpellSequences.Select(kv => $"{kv.Key.spellName}: {string.Join("-", kv.Value)}"));
+        Debug.Log($"[Sorts de la run] {SpellSequences.Count} sort(s):\n{list}");
     }
 
     // Noeuds accessibles depuis la position actuelle (toute la premiere rangee si on vient d'arriver sur l'etage).

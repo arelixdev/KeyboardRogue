@@ -1,3 +1,4 @@
+using System.Linq;
 using TMPro;
 using UnityEngine;
 
@@ -5,6 +6,7 @@ public class HUDController : MonoBehaviour
 {
     [SerializeField] private TMP_Text healthText;
     [SerializeField] private TMP_Text enemiesText;
+    [SerializeField] private TMP_Text spellsText;
 
     private Health playerHealth;
 
@@ -21,5 +23,20 @@ public class HUDController : MonoBehaviour
 
         healthText.text = $"PV: {playerHealth.Current}/{playerHealth.Max}";
         enemiesText.text = $"Ennemis restants: {GameManager.Instance.Spawner.RemainingCount}";
+
+        if (spellsText != null)
+            spellsText.text = BuildSpellsText();
+    }
+
+    private string BuildSpellsText()
+    {
+        if (LevelSession.DiscoveredSpells.Count == 0)
+            return "Sorts: aucun decouvert";
+
+        var lines = LevelSession.DiscoveredSpells
+            .Where(spell => LevelSession.SpellSequences.ContainsKey(spell))
+            .Select(spell => $"{spell.spellName}: {string.Join("-", LevelSession.SpellSequences[spell])}");
+
+        return "Sorts:\n" + string.Join("\n", lines);
     }
 }

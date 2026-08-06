@@ -42,6 +42,10 @@ public class KeyboardGenerator : MonoBehaviour
     public KeyboardLayoutType Layout => layout;
     public IReadOnlyDictionary<char, KeyView> Keys => keys;
 
+    // Toutes les touches disponibles pour un layout donne (utilise par le systeme de sorts pour
+    // tirer des sequences de touches valides sans dependre d'une instance generee).
+    public static IEnumerable<char> GetAllCharacters(KeyboardLayoutType forLayout) => LayoutRows[forLayout].SelectMany(row => row);
+
     private void Awake()
     {
         // Le niveau choisi sur la carte du monde peut imposer son propre layout.
@@ -75,9 +79,42 @@ public class KeyboardGenerator : MonoBehaviour
             return;
 
         List<KeyView> pool = keys.Values.Where(k => k.Modifier == KeyModifierType.None).ToList();
+
+        if (encounter.singleModifierTypePerFight)
+        {
+            (KeyModifierType modifier, int count) = PickSingleModifierType(encounter);
+            ApplyModifierToRandomKeys(pool, modifier, count, encounter.stickyHitsRequired);
+            return;
+        }
+
         ApplyModifierToRandomKeys(pool, KeyModifierType.Disabled, encounter.disabledKeyCount);
         ApplyModifierToRandomKeys(pool, KeyModifierType.Sticky, encounter.stickyKeyCount, encounter.stickyHitsRequired);
         ApplyModifierToRandomKeys(pool, KeyModifierType.Frozen, encounter.frozenKeyCount);
+    }
+
+    // Tire un seul type de modificateur (Casse/Englue/Gele), au poids de son compte configure,
+    // pour que toutes les cases impactees d'un meme combat Elite restent thematiquement coherentes.
+    private static (KeyModifierType modifier, int count) PickSingleModifierType(EliteEncounterConfig encounter)
+    {
+        var candidates = new List<(KeyModifierType modifier, int count)>();
+        if (encounter.disabledKeyCount > 0) candidates.Add((KeyModifierType.Disabled, encounter.disabledKeyCount));
+        if (encounter.stickyKeyCount > 0) candidates.Add((KeyModifierType.Sticky, encounter.stickyKeyCount));
+        if (encounter.frozenKeyCount > 0) candidates.Add((KeyModifierType.Frozen, encounter.frozenKeyCount));
+
+        if (candidates.Count == 0)
+            return (KeyModifierType.None, 0);
+
+        int totalCount = candidates.Sum(c => c.count);
+        int roll = Random.Range(0, totalCount);
+        int cursor = 0;
+        foreach ((KeyModifierType modifier, int count) in candidates)
+        {
+            cursor += count;
+            if (roll < cursor)
+                return (modifier, totalCount);
+        }
+
+        return (candidates[candidates.Count - 1].modifier, totalCount);
     }
 
     private static void ApplyModifierToRandomKeys(List<KeyView> pool, KeyModifierType modifier, int count, int stickyHitsRequired = 3)

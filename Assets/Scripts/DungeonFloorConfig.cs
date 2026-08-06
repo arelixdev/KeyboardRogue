@@ -15,4 +15,8 @@ public class DungeonFloorConfig : ScriptableObject
 
     // Tire a la fin de chaque combat (Phase 4).
     public BonusDefinition[] possibleBonuses;
+
+    // Sorts pouvant etre reveles/lances sur cet etage (Phase 5). Regroupes entre tous les etages
+    // de la run pour l'attribution des sequences (voir SpellSystem/LevelSession).
+    public SpellDefinition[] possibleSpells;
 }

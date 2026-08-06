@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -195,7 +196,14 @@ public class WorldMapController : MonoBehaviour
         {
             if (chosenEvent.healAmount > 0)
                 LevelSession.PlayerHp = Mathf.Min(LevelSession.PlayerMaxHp, LevelSession.PlayerHp + chosenEvent.healAmount);
+
             eventText.text = chosenEvent.message;
+
+            if (chosenEvent.revealedSpell != null && LevelSession.SpellSequences.TryGetValue(chosenEvent.revealedSpell, out char[] sequence))
+            {
+                LevelSession.DiscoveredSpells.Add(chosenEvent.revealedSpell);
+                eventText.text += $"\n\n{chosenEvent.revealedSpell.spellName}: {string.Join(" - ", sequence)}\n{chosenEvent.revealedSpell.description}";
+            }
         }
         else
         {
@@ -212,7 +220,16 @@ public class WorldMapController : MonoBehaviour
         if (floor == null || floor.possibleEvents == null || floor.possibleEvents.Length == 0)
             return null;
 
-        return floor.possibleEvents[Random.Range(0, floor.possibleEvents.Length)];
+        // Un event qui revele un sort deja connu (decouvert via un autre event, ou tape par
+        // inadvertance) n'apporte plus rien: on evite de le tirer tant qu'un autre event reste possible.
+        List<EventDefinition> candidates = floor.possibleEvents
+            .Where(e => e.revealedSpell == null || !LevelSession.DiscoveredSpells.Contains(e.revealedSpell))
+            .ToList();
+
+        if (candidates.Count == 0)
+            candidates = floor.possibleEvents.ToList();
+
+        return candidates[Random.Range(0, candidates.Count)];
     }
 
     private void ShowToast(string message)

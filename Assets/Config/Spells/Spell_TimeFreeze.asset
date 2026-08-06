@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0bb4f7a67a78fe439bf1c8d506c2401, type: 3}
+  m_Name: Spell_TimeFreeze
+  m_EditorClassIdentifier: Assembly-CSharp::SpellDefinition
+  spellName: Gel temporel
+  description: Gele tous les ennemis pendant 3 secondes.
+  sequenceLength: 4
+  effectType: 2
+  effectValue: 3

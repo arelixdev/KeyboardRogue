@@ -10,4 +10,7 @@ public class EventDefinition : ScriptableObject
 
     // 0 = pas de soin.
     public int healAmount = 0;
+
+    // Non-null: cet event revele au joueur la sequence de touches d'un sort (Phase 5).
+    public SpellDefinition revealedSpell;
 }
