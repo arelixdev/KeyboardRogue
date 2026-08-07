@@ -19,4 +19,7 @@ public class MapNode
 
     // Non-null uniquement pour un noeud Elite ayant tire une particularite (voir MapGenerator).
     public EliteEncounterConfig EliteEncounter;
+
+    // Non-null uniquement pour un noeud Boss ayant tire un boss specifique (voir MapGenerator).
+    public BossDefinition ChosenBoss;
 }

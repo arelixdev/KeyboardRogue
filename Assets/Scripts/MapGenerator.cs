@@ -14,7 +14,7 @@ public static class MapGenerator
             rows.Add(GenerateRegularRow(r, columns, config));
 
         rows.Add(GenerateRestRow(regularRowCount, columns));
-        rows.Add(GenerateBossRow(regularRowCount + 1));
+        rows.Add(GenerateBossRow(regularRowCount + 1, config));
 
         for (int r = 0; r < rows.Count - 1; r++)
             ConnectRows(rows[r], rows[r + 1]);
@@ -67,9 +67,14 @@ public static class MapGenerator
         return nodes;
     }
 
-    private static List<MapNode> GenerateBossRow(int row)
+    private static List<MapNode> GenerateBossRow(int row, DungeonFloorConfig config)
     {
-        return new List<MapNode> { new MapNode { Row = row, Column = 0, Type = MapNodeType.Boss } };
+        var node = new MapNode { Row = row, Column = 0, Type = MapNodeType.Boss };
+
+        if (config.possibleBosses != null && config.possibleBosses.Length > 0)
+            node.ChosenBoss = config.possibleBosses[Random.Range(0, config.possibleBosses.Length)];
+
+        return new List<MapNode> { node };
     }
 
     private static void ConnectRows(List<MapNode> from, List<MapNode> to)

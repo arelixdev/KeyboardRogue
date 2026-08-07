@@ -16,4 +16,4 @@ MonoBehaviour:
   description: Inflige 2 degats a tous les ennemis presents.
   sequenceLength: 3
   effectType: 0
-  effectValue: 2
+  effectValue: 1

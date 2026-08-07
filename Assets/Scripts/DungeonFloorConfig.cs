@@ -19,4 +19,8 @@ public class DungeonFloorConfig : ScriptableObject
     // Sorts pouvant etre reveles/lances sur cet etage (Phase 5). Regroupes entre tous les etages
     // de la run pour l'attribution des sequences (voir SpellSystem/LevelSession).
     public SpellDefinition[] possibleSpells;
+
+    // Boss pouvant apparaitre sur la rangee finale de cet etage (Phase 6). Tire au hasard; si vide,
+    // le noeud Boss reste un combat classique a vagues d'ennemis (comportement historique).
+    public BossDefinition[] possibleBosses;
 }

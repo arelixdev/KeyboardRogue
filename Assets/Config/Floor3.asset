@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Floor3
   m_EditorClassIdentifier: Assembly-CSharp::DungeonFloorConfig
   floorName: Etage 3
-  regularRowCount: 4
-  columns: 6
+  regularRowCount: 7
+  columns: 4
   possibleEvents:
   - {fileID: 11400000, guid: e85811d03bca23f4993d6672588869b0, type: 2}
   - {fileID: 11400000, guid: 2f40582ce7108e049aa04f7c07eac55f, type: 2}
@@ -38,3 +38,5 @@ MonoBehaviour:
   - {fileID: 11400000, guid: dfee11c3e26336f4bb7a465d4006b4b1, type: 2}
   - {fileID: 11400000, guid: f0105b1fbebe05541949e682379b9ea5, type: 2}
   - {fileID: 11400000, guid: 42b3071125824a842a00da9648b549f5, type: 2}
+  possibleBosses:
+  - {fileID: 11400000, guid: 633c58bb538d7444bac69f4e6371290b, type: 2}

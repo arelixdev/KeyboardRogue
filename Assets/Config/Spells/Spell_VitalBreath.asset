@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SpellDefinition
   spellName: Souffle vital
   description: Restaure 2 PV immediatement.
-  sequenceLength: 2
+  sequenceLength: 6
   effectType: 1
   effectValue: 2

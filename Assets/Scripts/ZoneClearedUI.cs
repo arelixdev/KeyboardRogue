@@ -14,6 +14,10 @@ public class ZoneClearedUI : MonoBehaviour
     private BonusDefinition chosenBonus;
     private bool waitingForKeyChoice;
 
+    // Un combat de boss est nettoye quand le boss ET (s'il y en a) tous ses mobs sont vaincus.
+    private bool bossPending;
+    private bool mobsPending;
+
     private void Awake()
     {
         mapButton.onClick.AddListener(ReturnToMap);
@@ -21,8 +25,38 @@ public class ZoneClearedUI : MonoBehaviour
 
     private void Start()
     {
-        GameManager.Instance.Spawner.AllEnemiesDefeated += ShowMessage;
+        if (GameManager.Instance.Boss != null)
+        {
+            bossPending = true;
+            GameManager.Instance.Boss.Health.Died += OnBossDefeated;
+        }
+
+        // Sans boss, ou avec un boss qui fait aussi apparaitre des mobs: la vague classique compte.
+        if (GameManager.Instance.Boss == null || LevelSession.Current.chosenBoss.spawnsMobs)
+        {
+            mobsPending = true;
+            GameManager.Instance.Spawner.AllEnemiesDefeated += OnMobsDefeated;
+        }
+
         banner.SetActive(false);
+    }
+
+    private void OnBossDefeated()
+    {
+        bossPending = false;
+        TryShowMessage();
+    }
+
+    private void OnMobsDefeated()
+    {
+        mobsPending = false;
+        TryShowMessage();
+    }
+
+    private void TryShowMessage()
+    {
+        if (!bossPending && !mobsPending)
+            ShowMessage();
     }
 
     // Affiche le message. Ne bloque pas le jeu: le joueur peut continuer a se deplacer jusqu'a

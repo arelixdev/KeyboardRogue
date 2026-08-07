@@ -103,7 +103,7 @@ public static class LevelSession
     {
         PendingNode = node;
         int globalDepth = GetGlobalDepth(node.Row);
-        Current = DifficultyScaling.Build(node.Type, globalDepth, DifficultyCurve, node.EliteEncounter);
+        Current = DifficultyScaling.Build(node.Type, globalDepth, DifficultyCurve, node.EliteEncounter, node.ChosenBoss);
     }
 
     public static DungeonFloorConfig CurrentFloorConfig =>

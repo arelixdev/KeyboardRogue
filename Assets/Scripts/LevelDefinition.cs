@@ -11,4 +11,7 @@ public class LevelDefinition : ScriptableObject
 
     // Non-null si ce combat est un Elite ayant tire une particularite (voir EliteEncounterConfig).
     public EliteEncounterConfig eliteEncounter;
+
+    // Non-null si ce combat est un Boss ayant tire un boss specifique (voir BossDefinition).
+    public BossDefinition chosenBoss;
 }

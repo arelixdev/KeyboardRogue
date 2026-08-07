@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9fb4eb50cc3183941a98df4214e75c5c, type: 3}
+  m_Name: Boss_PoingRageur
+  m_EditorClassIdentifier: Assembly-CSharp::BossDefinition
+  bossName: Le Poing Rageur
+  description: Deux poings martelent le clavier a tour de role. Frappez-les durant
+    leur ouverture de 4 secondes. Le survivant s'enerve et enchaine trois zones dangereuses
+    avant de se decouvrir a nouveau.
+  bossPrefab: {fileID: 6536859518280565357, guid: c99ea3d16e020164599beb0977c6954b, type: 3}
+  bossHp: 20
+  spawnsMobs: 0
+  maxEnemiesPerLevel: 6
+  maxConcurrentEnemies: 2
+  spawnInterval: 5
+  fistVulnerableDuration: 4
+  fistZoneRadius: 2
+  fistVisualScale: 0.85
+  shockwaveGrowDuration: 1
+  shockwaveMaxRadius: 1.4
+  shockwaveDamage: 1

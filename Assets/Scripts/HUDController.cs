@@ -22,7 +22,11 @@ public class HUDController : MonoBehaviour
             return;
 
         healthText.text = $"PV: {playerHealth.Current}/{playerHealth.Max}";
-        enemiesText.text = $"Ennemis restants: {GameManager.Instance.Spawner.RemainingCount}";
+
+        if (GameManager.Instance.Boss != null)
+            enemiesText.text = $"Boss: {GameManager.Instance.Boss.Health.Current}/{GameManager.Instance.Boss.Health.Max}";
+        else
+            enemiesText.text = $"Ennemis restants: {GameManager.Instance.Spawner.RemainingCount}";
 
         if (spellsText != null)
             spellsText.text = BuildSpellsText();
