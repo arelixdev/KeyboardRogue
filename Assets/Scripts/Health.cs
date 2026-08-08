@@ -54,4 +54,13 @@ public class Health : MonoBehaviour
             Died?.Invoke();
         }
     }
+
+    // Force la mort et l'evenement Died, meme si Current est deja tombe silencieusement a 0 via
+    // SetCurrent (ex: un total agrege par un autre script) : TakeDamage(Current) serait un no-op
+    // dans ce cas puisque son garde-fou bloque tout appel une fois Current <= 0.
+    public void Kill()
+    {
+        Current = 0;
+        Died?.Invoke();
+    }
 }

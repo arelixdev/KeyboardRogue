@@ -153,11 +153,10 @@ MonoBehaviour:
   keyboard: {fileID: 0}
   player: {fileID: 0}
   telegraphDuration: 1
-  vulnerableDuration: 3
   fistHp: 10
   pauseBetweenAttacks: 0.5
-  comboHitDuration: 0.8
-  comboPauseBetweenHits: 0.4
+  comboHitDuration: 0.2
+  comboPauseBetweenHits: 0.1
   fistVisuals:
   - {fileID: 4412875982046641857}
   - {fileID: 5377316682441727010}

@@ -154,15 +154,17 @@ public class FistBossController : BossController
             OnFistDefeated(fistIndex);
     }
 
+    // Combo de 3 frappes au total: les 2 premieres dangereuses (Hazard), la 3eme s'arrete en
+    // fenetre vulnerable pour laisser le joueur riposter (au lieu d'une 4eme frappe separee).
     private IEnumerator EnrageCombo(int fistIndex)
     {
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < 2; i++)
         {
             List<KeyView> zone = PickZoneAround(PickRandomCenter());
             MoveFistTo(fistIndex, zone[0]);
 
             BossAttackZone hit = SpawnZone(zone, fistIndex);
-            yield return StartCoroutine(hit.RunHazard(telegraphDuration, comboHitDuration));
+            yield return StartCoroutine(hit.RunHazard(telegraphDuration, comboHitDuration, shockwaveGrowDuration, shockwaveMaxRadius, shockwaveDamage));
             yield return new WaitForSeconds(comboPauseBetweenHits);
         }
 
@@ -195,12 +197,23 @@ public class FistBossController : BossController
 
         bool anyAlive = fistAlive.Any(alive => alive);
 
-        // Le total (Update()) reflete deja la perte de ce poing; ici on ne fait que declencher
-        // proprement Health.Died quand il ne reste plus personne.
+        // Le total (Update()) a deja pu ramener Health.Current a 0 silencieusement avant qu'on
+        // arrive ici (SetCurrent ne declenche pas Died) : Kill() garantit que Died se declenche
+        // quand meme, au lieu de TakeDamage(0) qui serait un no-op dans ce cas.
         if (!anyAlive)
-            Health.TakeDamage(Health.Current);
+        {
+            Health.Kill();
+        }
         else
+        {
+            // Le poing survivant repart a fond en passant en Phase 2: l'enrage est une seconde
+            // vie, pas juste la suite de la premiere.
+            int survivorIndex = fistIndex == 0 ? 1 : 0;
+            if (fistHealths[survivorIndex] != null)
+                fistHealths[survivorIndex].SetCurrent(fistHealths[survivorIndex].Max);
+
             enraged = true;
+        }
     }
 
     private BossAttackZone SpawnZone(List<KeyView> keys, int fistIndex)

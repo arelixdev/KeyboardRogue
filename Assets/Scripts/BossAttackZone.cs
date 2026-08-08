@@ -40,12 +40,16 @@ public class BossAttackZone : MonoBehaviour
         fistTransform = targetFistTransform;
     }
 
-    public IEnumerator RunHazard(float telegraphDuration, float activeDuration)
+    // Chaque coup du combo laisse aussi une onde de choc au sol (meme mecanique qu'en mode
+    // Vulnerable, mais elle cible ici le joueur en guise d'attaque, pas de fenetre de riposte).
+    public IEnumerator RunHazard(float telegraphDuration, float activeDuration, float shockwaveGrowDuration, float shockwaveMaxRadius, int shockwaveDamage)
     {
         mode = AttackZoneMode.Hazard;
         yield return new WaitForSeconds(telegraphDuration);
         if (this == null)
             yield break;
+
+        SpawnShockwave(shockwaveGrowDuration, shockwaveMaxRadius, shockwaveDamage);
 
         yield return RunActivePhase(activeDuration);
 
