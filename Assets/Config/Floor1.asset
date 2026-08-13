@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Floor1
   m_EditorClassIdentifier: Assembly-CSharp::DungeonFloorConfig
   floorName: Etage 1
-  regularRowCount: 1
+  regularRowCount: 5
   columns: 3
   possibleEvents:
   - {fileID: 11400000, guid: e85811d03bca23f4993d6672588869b0, type: 2}

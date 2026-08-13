@@ -27,11 +27,33 @@ public class KeyView : MonoBehaviour
     public int Col { get; private set; }
     public KeyModifierType Modifier { get; private set; } = KeyModifierType.None;
 
+    // Variantes visuelles (formes/keycaps differents) parmi lesquelles chaque touche pioche au
+    // hasard: casse la repetition du clavier sans toucher au gameplay.
+    [SerializeField] private GameObject[] visualVariants;
+
     private TMP_Text label;
     private Renderer bodyRenderer;
     private Color baseColor;
     private int stickyHitsRemaining;
     private bool isSpellHighlighted;
+
+    // Appele explicitement par KeyboardGenerator.Generate() juste apres l'Instantiate, plutot que
+    // depuis Awake(): Instantiate() ne declenche pas Awake() de facon fiable hors Play Mode (ex:
+    // regeneration depuis l'Editeur), ce qui laissait toutes les variantes visibles en meme temps.
+    // Doit tourner avant SetCharacter/ApplyVisual (qui capturent le premier Renderer trouve): le
+    // variant choisi doit deja etre le seul actif a ce moment-la.
+    public void PickRandomVariant()
+    {
+        if (visualVariants == null || visualVariants.Length == 0)
+            return;
+
+        int chosen = Random.Range(0, visualVariants.Length);
+        for (int i = 0; i < visualVariants.Length; i++)
+        {
+            if (visualVariants[i] != null)
+                visualVariants[i].SetActive(i == chosen);
+        }
+    }
 
     public void SetCharacter(char character, int row, int col)
     {

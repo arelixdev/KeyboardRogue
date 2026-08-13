@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f1ecfe4b37d5fa49836ef4082e10207, type: 3}
   m_Name: DifficultyCurve
   m_EditorClassIdentifier: Assembly-CSharp::DifficultyCurveConfig
-  baseEnemies: 1
+  baseEnemies: 6
   baseConcurrent: 2
-  baseInterval: 5
+  baseInterval: 3
   enemiesPerRow: 2
   concurrentPerRow: 0.5
   intervalReductionPerRow: 0.3

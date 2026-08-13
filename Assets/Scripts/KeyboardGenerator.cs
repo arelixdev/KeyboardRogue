@@ -151,6 +151,7 @@ public class KeyboardGenerator : MonoBehaviour
 
                 KeyView key = Instantiate(keyPrefab, transform);
                 key.transform.localPosition = localPosition;
+                key.PickRandomVariant();
                 key.SetCharacter(c, row, col);
 
                 keys[c] = key;
